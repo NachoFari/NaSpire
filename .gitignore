@@ -1,0 +1,19 @@
+# Entornos virtuales y caché Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Builds e instaladores (se suben como Releases en GitHub, no al árbol git)
+build/
+dist/
+dist_installer/
+*.spec
+*.zip
+
+# Archivos temporales y pruebas locales
+rk4_solver.tns
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NaSpire Studio — NaSuite TI-Nspire Manager</title>
+    <link rel="stylesheet" href="/static/css/naspire.css" />
+</head>
+<body>
+    <!-- Splash Screen estilo NaTex / NaSuite -->
+    <div id="splash-screen">
+        <div class="splash-logo-wrap">
+            <img class="px-icon" src="/static/img/icons/calc.png" width="48" height="48" alt="NaSpire" />
+        </div>
+        <div class="splash-title">Na<span>Spire</span> Studio</div>
+        <div class="splash-sub">NaSuite • Herramientas Portables by NachoFari</div>
+        <div class="splash-bar-track">
+            <div id="splash-bar" class="splash-bar-fill"></div>
+        </div>
+        <div id="splash-status" class="splash-status">Iniciando motor USB...</div>
+    </div>
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <div class="brand">
+            <div class="brand-icon">
+                <img class="px-icon" src="/static/img/icons/calc.png" width="24" height="24" alt="NaSpire" />
+            </div>
+            <div>
+                <div class="brand-name">NaSpire <span style="color:var(--fox-orange)">Studio</span></div>
+                <span class="brand-sub">NaSuite • TI-Nspire Manager</span>
+            </div>
+        </div>
+
+        <div class="top-center">
+            <div class="device-pill">
+                <span id="status-dot" class="status-dot"></span>
+                <span id="device-title">Desconectada</span>
+                <span id="device-os-chip" class="device-meta-chip" style="display:none;">OS --</span>
+                <span id="device-batt-chip" class="device-meta-chip" style="display:none;">--</span>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <button id="btn-update-pill" class="btn btn-sm" style="display:none;border-color:var(--success);color:var(--success);background:var(--success-soft);" title="Nueva versión disponible en GitHub">
+                <img class="px-icon" src="/static/img/icons/download.png" width="15" height="15" alt="" />
+                <span id="update-pill-text">Nueva versión</span>
+            </button>
+            <button class="btn btn-sm" data-open-catalog title="Abrir catálogo oficial de funciones TI-Nspire CX II CAS">
+                <img class="px-icon" src="/static/img/icons/catalog.png" width="16" height="16" alt="" />
+                Catálogo TI
+            </button>
+            <button id="btn-connect" class="btn btn-primary">
+                <img class="px-icon" src="/static/img/icons/usb.png" width="16" height="16" alt="" />
+                Conectar USB
+            </button>
+            <button id="btn-disconnect" class="btn btn-danger" style="display:none;">Desconectar</button>
+        </div>
+    </header>
+
+    <!-- Workspace -->
+    <div class="workspace">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="nav-group">
+                <div class="nav-label">Herramientas</div>
+                <button class="nav-item active" data-view="explorer">
+                    <img class="px-icon" src="/static/img/icons/folder.png" width="18" height="18" alt="" />
+                    Explorador
+                </button>
+                <button class="nav-item" data-view="screenshot">
+                    <img class="px-icon" src="/static/img/icons/tv_live.png" width="18" height="18" alt="" />
+                    Capturas (SS)
+                </button>
+                <button class="nav-item" data-view="creator">
+                    <img class="px-icon" src="/static/img/icons/file_tns.png" width="18" height="18" alt="" />
+                    Creador .tns
+                </button>
+                <button class="nav-item" data-view="editor">
+                    <img class="px-icon" src="/static/img/icons/edit.png" width="18" height="18" alt="" />
+                    Editor .tns
+                </button>
+                <button class="nav-item" data-view="device">
+                    <img class="px-icon" src="/static/img/icons/calc.png" width="18" height="18" alt="" />
+                    Dispositivo
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="storage-mini">
+                    <div class="storage-mini-head">
+                        <span>Almac. (Total / Libre)</span>
+                        <span id="storage-text">-- / --</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="storage-bar" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="author-links">
+                    <a class="author-link" href="#" data-external="https://github.com/NachoFari" title="GitHub de NachoFari">
+                        <img class="px-icon" src="/static/img/icons/fox.png" width="14" height="14" alt="" />
+                        GitHub
+                    </a>
+                    <a class="author-link" href="#" data-external="https://nachofari.github.io" title="Web de NachoFari">
+                        <img class="px-icon" src="/static/img/icons/graph.png" width="14" height="14" alt="" />
+                        Web
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Panels -->
+        <main class="main-content">
+            <!-- VIEW 1: EXPLORADOR DE ARCHIVOS -->
+            <section id="view-explorer" class="view-panel active">
+                <div class="panel-toolbar">
+                    <div id="breadcrumbs" class="breadcrumbs">
+                        <span class="crumb current">/ Raíz</span>
+                    </div>
+                    <div class="toolbar-right">
+                        <input id="file-search" class="input" type="text" placeholder="Filtrar archivos..." style="width:170px;" />
+                        <button id="btn-refresh-dir" class="btn btn-sm" title="Recargar carpeta">Recargar</button>
+                        <button id="btn-new-folder" class="btn btn-sm">
+                            <img class="px-icon" src="/static/img/icons/folder.png" width="15" height="15" alt="" />
+                            Nueva Carpeta
+                        </button>
+                        <button id="btn-upload-files" class="btn btn-primary btn-sm">
+                            <img class="px-icon" src="/static/img/icons/upload.png" width="15" height="15" alt="" />
+                            Subir archivos
+                        </button>
+                        <input id="file-upload-input" type="file" multiple style="display:none;" />
+                    </div>
+                </div>
+
+                <div id="explorer-body" class="explorer-body">
+                    <div id="drop-overlay" class="drop-overlay">
+                        <img class="px-icon" src="/static/img/icons/upload.png" width="40" height="40" alt="" />
+                        <div style="font-size:15px;font-weight:700;color:#fff;">Suelta archivos aquí para subirlos a la TI-Nspire</div>
+                        <div style="font-size:12px;color:var(--text-muted);">Se subirán a la carpeta actual</div>
+                    </div>
+
+                    <div id="explorer-container">
+                        <div class="empty-state">
+                            <h3>Conecta tu TI-Nspire para explorar sus archivos</h3>
+                            <p>Arrastra archivos desde tu PC, haz doble clic en un <code>.tns</code> para abrirlo en el Editor, crea carpetas, renombra o mueve archivos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: CAPTURA DE PANTALLA (SS) Y PROYECTOR -->
+            <section id="view-screenshot" class="view-panel">
+                <div class="panel-toolbar">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="font-weight:700;font-size:14px;">Pantalla en Vivo y Capturas (SS)</span>
+                        <span id="ss-fps-badge" class="device-meta-chip" style="display:none;">0.0 FPS</span>
+                    </div>
+                    <div class="toolbar-right">
+                        <select id="ss-live-speed" class="select" style="padding:5px 8px;font-size:12px;" title="Velocidad de proyección">
+                            <option value="1000">1 FPS (Suave)</option>
+                            <option value="250" selected>Rápido (~4 FPS)</option>
+                            <option value="60">Máximo (USB)</option>
+                        </select>
+                        <button id="btn-projector-toggle" class="btn btn-primary btn-sm">
+                            <img class="px-icon" src="/static/img/icons/tv_live.png" width="15" height="15" alt="" />
+                            Proyectar en Vivo
+                        </button>
+                        <button id="btn-fullscreen-ss" class="btn btn-sm" title="Pantalla completa para proyectar">Pantalla Completa</button>
+                        <select id="ss-zoom" class="select" style="padding:5px 8px;font-size:12px;">
+                            <option value="320">1x (320px)</option>
+                            <option value="480" selected>1.5x (480px)</option>
+                            <option value="640">2x (640px)</option>
+                            <option value="800">2.5x (800px)</option>
+                        </select>
+                        <button id="btn-capture-ss" class="btn btn-sm">
+                            <img class="px-icon" src="/static/img/icons/camera.png" width="15" height="15" alt="" />
+                            Capturar SS
+                        </button>
+                        <button id="btn-copy-ss" class="btn btn-sm" disabled>
+                            <img class="px-icon" src="/static/img/icons/copy.png" width="15" height="15" alt="" />
+                            Copiar
+                        </button>
+                        <button id="btn-save-ss" class="btn btn-sm" disabled>
+                            <img class="px-icon" src="/static/img/icons/save.png" width="15" height="15" alt="" />
+                            PNG
+                        </button>
+                    </div>
+                </div>
+
+                <div class="screenshot-layout">
+                    <div id="screen-stage" class="screen-stage">
+                        <div class="calc-bezel">
+                            <div id="ss-bezel-label" class="calc-bezel-label">TI-NSPIRE CX II CAS • 320×240</div>
+                            <img id="ss-img" alt="Pantalla TI-Nspire" style="display:none;" />
+                            <div id="ss-placeholder" style="width:480px;max-width:100%;height:360px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);background:#12141c;border-radius:4px;font-size:13px;">
+                                Presiona "Proyectar en Vivo" o "Capturar SS" para ver la pantalla de tu calculadora
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ss-history-panel">
+                        <div class="ss-history-head">
+                            <span>Historial de sesión</span>
+                            <button id="btn-clear-ss-history" class="btn btn-ghost btn-sm">Limpiar</button>
+                        </div>
+                        <div id="ss-history-list" class="ss-history-list">
+                            <div style="color:var(--text-muted);font-size:12px;text-align:center;padding:24px 8px;">
+                                Las capturas que saques aparecerán aquí.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: CREADOR DE ARCHIVOS .TNS -->
+            <section id="view-creator" class="view-panel">
+                <div class="panel-toolbar">
+                    <div style="font-weight:700;font-size:14px;">Creador Visual de Documentos .tns</div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-sm" data-open-catalog>
+                            <img class="px-icon" src="/static/img/icons/catalog.png" width="15" height="15" alt="" />
+                            Funciones TI
+                        </button>
+                        <span id="luna-status-badge" class="device-meta-chip">Verificando...</span>
+                    </div>
+                </div>
+
+                <div class="creator-layout">
+                    <div class="creator-tabs">
+                        <button class="btn btn-primary btn-sm creator-tab" data-mode="spreadsheet">
+                            <img class="px-icon" src="/static/img/icons/spreadsheet.png" width="15" height="15" alt="" />
+                            Hoja de Cálculo / Listas
+                        </button>
+                        <button class="btn btn-sm creator-tab" data-mode="functions">
+                            <img class="px-icon" src="/static/img/icons/calc.png" width="15" height="15" alt="" />
+                            Funciones y Notas
+                        </button>
+                        <button class="btn btn-sm creator-tab" data-mode="python">
+                            <img class="px-icon" src="/static/img/icons/python.png" width="15" height="15" alt="" />
+                            Script Python (CX II)
+                        </button>
+                        <button class="btn btn-sm creator-tab" data-mode="lua">
+                            <img class="px-icon" src="/static/img/icons/lua.png" width="15" height="15" alt="" />
+                            Script Lua
+                        </button>
+                    </div>
+
+                    <div class="creator-card">
+                        <div class="form-grid">
+                            <div class="field">
+                                <label>Nombre del archivo (.tns)</label>
+                                <input id="tns-filename" class="input" type="text" value="mi_hoja_naspire" placeholder="ej: analisis_lab" />
+                            </div>
+                            <div class="field">
+                                <label>Carpeta destino en la calculadora</label>
+                                <div style="display:flex;gap:6px;">
+                                    <select id="tns-upload-dir" class="select" style="flex:1;">
+                                        <option value="/">/ (Raíz)</option>
+                                    </select>
+                                    <button id="btn-refresh-tns-folders" class="btn btn-sm" title="Actualizar lista de carpetas">Recargar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mode: Spreadsheet -->
+                        <div id="creator-mode-spreadsheet" class="creator-mode-box">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap;">
+                                <span style="font-size:12.5px;color:var(--text-muted);">Hoja 100% nativa TI-Nspire. Arrastra la esquina naranja para autorrellenar, usa <code>Ctrl+D</code>, pega desde Excel (<code>Ctrl+V</code>) o escribe funciones TI para autocompletar.</span>
+                                <div style="display:flex;gap:6px;">
+                                    <button id="btn-sheet-preset-rk4" class="btn btn-sm" title="Cargar plantilla Runge-Kutta 4 (RK4)">
+                                        <img class="px-icon" src="/static/img/icons/graph.png" width="14" height="14" alt="" />
+                                        Plantilla RK4
+                                    </button>
+                                    <button id="btn-sheet-add-col" class="btn btn-sm">+ Columna</button>
+                                    <button id="btn-sheet-add-row" class="btn btn-sm">+ Fila</button>
+                                </div>
+                            </div>
+                            <div class="sheet-wrap">
+                                <table id="sheet-table" class="sheet-table"></table>
+                            </div>
+                        </div>
+
+                        <!-- Mode: Functions & Notes -->
+                        <div id="creator-mode-functions" class="creator-mode-box" style="display:none;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <span style="font-size:12.5px;color:var(--text-muted);">Genera un documento <strong>nativo</strong> con pestaña <strong>1.1 Calculadora</strong> (funciones definidas) y <strong>1.2 Notas</strong>.</span>
+                                <button id="btn-add-fn-row" class="btn btn-sm">+ Agregar función</button>
+                            </div>
+                            <div id="fn-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+                            <div class="field">
+                                <label>Notas / Formulario rápido</label>
+                                <textarea id="fn-notes" class="textarea" rows="4" placeholder="Escribe fórmulas, constantes o apuntes..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Mode: Python -->
+                        <div id="creator-mode-python" class="creator-mode-box" style="display:none;">
+                            <div class="field">
+                                <label>Código Python (compatible con TI-Nspire CX II OS 5.2+)</label>
+                                <textarea id="tns-python-code" class="textarea code-editor"># Script generado con NaSpire Studio (NaSuite)
+from math import *
+
+def energia_cinetica(m, v):
+    return 0.5 * m * v**2
+
+print("NaSpire listo! Ec(2, 5) =", energia_cinetica(2, 5))
+</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Mode: Lua -->
+                        <div id="creator-mode-lua" class="creator-mode-box" style="display:none;">
+                            <div class="field">
+                                <label>Código Lua (compatible con OS 3.0.2+)</label>
+                                <textarea id="tns-lua-code" class="textarea code-editor">-- App Lua generada con NaSpire Studio (NaSuite)
+platform.apilevel = '2.4'
+
+function on.paint(gc)
+    gc:setColorRGB(16, 17, 22)
+    gc:fillRect(0, 0, platform.window:width(), platform.window:height())
+    gc:setColorRGB(255, 107, 53)
+    gc:setFont("sansserif", "b", 14)
+    gc:drawString("NaSpire Studio — Hola TI-Nspire!", 18, 100, "top")
+end
+</textarea>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:6px;">
+                            <button id="btn-build-download" class="btn">
+                                <img class="px-icon" src="/static/img/icons/save.png" width="15" height="15" alt="" />
+                                Compilar y Descargar .tns
+                            </button>
+                            <button id="btn-build-upload" class="btn btn-primary">
+                                <img class="px-icon" src="/static/img/icons/upload.png" width="15" height="15" alt="" />
+                                Compilar y Subir a TI-Nspire
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: EDITOR VISUAL DE ARCHIVOS .TNS -->
+            <section id="view-editor" class="view-panel">
+                <div class="panel-toolbar">
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <span style="font-weight:700;font-size:14px;">Editor Visual .tns</span>
+                        <span id="editor-doc-title" class="device-meta-chip">Sin archivo abierto</span>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-sm" data-open-catalog>
+                            <img class="px-icon" src="/static/img/icons/catalog.png" width="15" height="15" alt="" />
+                            Funciones TI
+                        </button>
+                        <button id="btn-editor-open-local" class="btn btn-sm">
+                            <img class="px-icon" src="/static/img/icons/folder.png" width="15" height="15" alt="" />
+                            Abrir .tns local
+                        </button>
+                        <input id="editor-local-file" type="file" accept=".tns" style="display:none;" />
+                        <button id="btn-editor-toggle-xml" class="btn btn-sm" disabled>&lt;/&gt; Ver XML</button>
+                        <button id="btn-editor-pretty" class="btn btn-sm" style="display:none;" disabled>Formatear XML</button>
+                        <button id="btn-editor-download" class="btn btn-sm" disabled>
+                            <img class="px-icon" src="/static/img/icons/save.png" width="15" height="15" alt="" />
+                            Descargar .tns
+                        </button>
+                        <button id="btn-editor-save-calc" class="btn btn-primary btn-sm" disabled>
+                            <img class="px-icon" src="/static/img/icons/upload.png" width="15" height="15" alt="" />
+                            Guardar en TI-Nspire
+                        </button>
+                    </div>
+                </div>
+
+                <div class="creator-layout">
+                    <div class="creator-card" style="flex:1;display:flex;flex-direction:column;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                            <div id="editor-page-tabs" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                                <span style="font-size:12.5px;color:var(--text-muted);">Haz doble clic en cualquier <code>.tns</code> del Explorador o abre uno local para editar sus pestañas.</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <label style="font-size:12px;color:var(--text-muted);">Ruta destino:</label>
+                                <input id="editor-save-path" class="input" type="text" placeholder="/test/archivo.tns" style="width:220px;padding:6px 10px;" />
+                            </div>
+                        </div>
+
+                        <!-- Modo Visual por Pestaña -->
+                        <div id="editor-visual-pane" style="flex:1;display:flex;flex-direction:column;gap:12px;overflow-y:auto;">
+                            <div class="empty-state">
+                                <h3>Sin documento abierto</h3>
+                                <p>Haz doble clic en cualquier <code>.tns</code> en el Explorador o abre uno local para editar sus pestañas de Calculadora, Hoja de Cálculo, Notas o Gráficos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Modo XML Avanzado -->
+                        <div id="editor-xml-pane" style="display:none;flex:1;flex-direction:column;gap:10px;">
+                            <div id="editor-file-tabs" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+                            <textarea id="editor-xml-area" class="textarea code-editor" style="flex:1;min-height:360px;" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: DISPOSITIVO Y ACERCA DE -->
+            <section id="view-device" class="view-panel">
+                <div class="panel-toolbar">
+                    <div style="font-weight:700;font-size:14px;">Información del Dispositivo y Compatibilidad</div>
+                    <button id="btn-refresh-info" class="btn btn-sm">Actualizar</button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="info-card">
+                        <h3><img class="px-icon" src="/static/img/icons/calc.png" width="18" height="18" alt="" /> Calculadora Conectada</h3>
+                        <div id="device-info-kv" class="kv-list">
+                            <div class="kv-row"><span class="kv-key">Estado</span><span class="kv-val">Desconectada</span></div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><img class="px-icon" src="/static/img/icons/usb.png" width="18" height="18" alt="" /> Modelos Compatibles</h3>
+                        <div id="supported-models-list" class="kv-list"></div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><img class="px-icon" src="/static/img/icons/fox.png" width="18" height="18" alt="" /> Acerca de NaSpire Studio</h3>
+                        <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;">
+                            Parte del ecosistema portable de ingeniería <strong>NaSuite</strong> (junto a <strong>NaTex</strong>) por <strong>NachoFari</strong>. Diseñado para gestionar archivos, proyectar pantalla en vivo y crear/editar documentos <code>.tns</code> nativos desde cualquier PC.
+                        </p>
+                        <div class="kv-row" style="margin-top:4px;">
+                            <span class="kv-key">Versión instalada</span>
+                            <span id="app-version-label" class="kv-val">v1.0.0</span>
+                        </div>
+                        <div id="update-status-text" style="font-size:12px;color:var(--text-muted);">Actualizaciones automáticas vía GitHub Releases.</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+                            <button id="btn-check-updates" class="btn btn-sm">
+                                <img class="px-icon" src="/static/img/icons/download.png" width="14" height="14" alt="" />
+                                Buscar actualizaciones
+                            </button>
+                            <button class="btn btn-primary btn-sm" data-external="https://github.com/NachoFari">GitHub @NachoFari</button>
+                            <button class="btn btn-sm" data-external="https://nachofari.github.io">nachofari.github.io</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal genérico (Crear carpeta / Renombrar / Mover) -->
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div class="modal">
+            <div id="modal-title" class="modal-title">Acción</div>
+            <div id="modal-desc" style="font-size:12.5px;color:var(--text-muted);"></div>
+            <input id="modal-input" class="input" type="text" />
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-sm">Cancelar</button>
+                <button id="modal-confirm" class="btn btn-primary btn-sm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Catálogo Oficial de Funciones TI-Nspire CX II CAS -->
+    <div id="catalog-modal" class="modal-backdrop">
+        <div class="modal modal-lg">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <img class="px-icon" src="/static/img/icons/catalog.png" width="20" height="20" alt="" />
+                    <span class="modal-title">Catálogo Oficial TI-Nspire CX II CAS</span>
+                </div>
+                <button id="catalog-close" class="btn btn-sm btn-ghost">Cerrar</button>
+            </div>
+            <div style="display:flex;gap:8px;">
+                <input id="catalog-search" class="input" type="text" placeholder="Buscar función (ej: solve, rref, deSolve, when, mean, integral...)" style="flex:1;" />
+                <select id="catalog-cat" class="select">
+                    <option value="ALL">Todas las categorías</option>
+                    <option value="Álgebra CAS">Álgebra CAS</option>
+                    <option value="Cálculo">Cálculo</option>
+                    <option value="Hoja y Listas">Hoja y Listas</option>
+                    <option value="Matrices">Matrices</option>
+                    <option value="Trig y Exp">Trig y Exp</option>
+                    <option value="Definiciones">Definiciones</option>
+                </select>
+            </div>
+            <div id="catalog-list" class="catalog-list"></div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Módulos JS -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/ti_catalog.js"></script>
+    <script src="/static/js/sheet_ux.js"></script>
+    <script src="/static/js/explorer.js"></script>
+    <script src="/static/js/screenshot.js"></script>
+    <script src="/static/js/creator.js"></script>
+    <script src="/static/js/editor.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

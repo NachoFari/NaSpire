@@ -6,7 +6,7 @@
 
 **El entorno de escritorio portable, visual y nativo para calculadoras TI-Nspire — parte de NaSuite.**
 
-[![Descargar Instalador](https://img.shields.io/badge/Descargar-NaSpire_v1.0.0_(.exe)-FF6B35?style=for-the-badge&logo=windows)](https://github.com/NachoFari/NaSpire/releases/latest)
+[![Descargar Instalador](https://img.shields.io/badge/Descargar-NaSpire_Setup_v1.0.0_(.exe)-FF6B35?style=for-the-badge&logo=windows)](https://github.com/NachoFari/NaSpire/releases/latest/download/NaSpire-Setup-v1.0.0.exe)
 
 [![Version](https://img.shields.io/badge/version-v1.0.0-FF6B35.svg)](https://github.com/NachoFari/NaSpire/releases)
 [![Python](https://img.shields.io/badge/python-3.12%2B-38bdf8.svg)](https://www.python.org/)
@@ -22,12 +22,12 @@
 ## <img src="static/img/icons/download.png" width="22" height="22" alt="" /> Descarga e Instalación
 
 ### Opción 1: Instalador de Windows (`NaSpire-Setup-v1.0.0.exe`) — Recomendado
-1. Descarga la última versión desde **[Releases (v1.0.0)](https://github.com/NachoFari/NaSpire/releases/latest)**.
+1. Descarga el instalador con un clic: **[NaSpire-Setup-v1.0.0.exe](https://github.com/NachoFari/NaSpire/releases/latest/download/NaSpire-Setup-v1.0.0.exe)** *(o revisa todos los archivos en [Releases v1.0.0](https://github.com/NachoFari/NaSpire/releases/latest))*.
 2. Ejecuta **`NaSpire-Setup-v1.0.0.exe`**.
 3. Se instalará con acceso directo en el Escritorio, Menú Inicio, desinstalador y **actualizaciones automáticas** vía GitHub Releases.
 
 ### Opción 2: Versión 100% Portable (`NaSpire-v1.0.0-Windows-Portable.zip`)
-1. Descarga y descomprime el `.zip` en cualquier carpeta o pendrive.
+1. Descarga con un clic **[NaSpire-v1.0.0-Windows-Portable.zip](https://github.com/NachoFari/NaSpire/releases/latest/download/NaSpire-v1.0.0-Windows-Portable.zip)** y descomprímelo en cualquier carpeta o pendrive.
 2. Ejecuta **`NaSpire.exe`** directamente en cualquier computador con Windows 10/11 sin instalar Python ni librerías.
 
 ### Opción 3: Desde Código Fuente

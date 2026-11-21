@@ -1,41 +1,81 @@
-# NaSpire Studio — NaSuite
+<div align="center">
 
-Aplicación de escritorio nativa y portable para gestionar calculadoras **TI-Nspire** (CX II CAS, CX II, CX II-T, CX CAS, CX y modelos clásicos), parte del ecosistema **NaSuite** junto a **NaTex** por [NachoFari](https://github.com/NachoFari).
+<img src="static/img/icons/calc.png" width="64" height="64" alt="NaSpire Studio" />
 
-## Descarga e Instalación (Windows 10 / 11)
+# NaSpire Studio v1.0.0
 
-Descarga la última versión desde la sección **[Releases](https://github.com/NachoFari/NaSpire/releases)**:
+**El entorno de escritorio portable, visual y nativo para calculadoras TI-Nspire — parte de NaSuite.**
 
-- **Instalador Windows (Recomendado):** `NaSpire-Setup-v1.0.0.exe` — instala NaSpire Studio con acceso directo en el Escritorio, Menú Inicio, desinstalador y **actualizaciones automáticas**.
-- **Versión 100% Portable:** `NaSpire-v1.0.0-Windows-Portable.zip` — descomprime en cualquier PC y ejecuta **`NaSpire.exe`** sin instalar nada.
+[![Descargar Instalador](https://img.shields.io/badge/Descargar-NaSpire_v1.0.0_(.exe)-FF6B35?style=for-the-badge&logo=windows)](https://github.com/NachoFari/NaSpire/releases/latest)
 
-## Características principales
+[![Version](https://img.shields.io/badge/version-v1.0.0-FF6B35.svg)](https://github.com/NachoFari/NaSpire/releases)
+[![Python](https://img.shields.io/badge/python-3.12%2B-38bdf8.svg)](https://www.python.org/)
+[![Protocol](https://img.shields.io/badge/USB-NavNet_%2B_NNSE-10B981.svg)](https://github.com/NachoFari/NaSpire)
+[![Suite](https://img.shields.io/badge/ecosistema-NaSuite-f3f4f8.svg)](https://github.com/NachoFari)
 
-- **Conexión USB nativa (NavNet + NNSE):** Reconexión estable en Windows sin depender del navegador ni drivers externos.
-- **Explorador de archivos:** Navegación por carpetas, subida con arrastrar y soltar, descarga, renombrar, mover/reordenar arrastrando a carpetas, crear carpetas, eliminar y **etiquetas automáticas** de las apps contenidas en cada `.tns`.
-- **Modo Proyector en Vivo y Capturas (SS):** Proyección en tiempo real con selector de velocidad, contador de FPS, Pantalla Completa, zoom, historial y exportación a PNG.
-- **Creador Visual de documentos `.tns` nativos:**
-  - **Listas y Hoja de Cálculo** 100% nativa (plantilla RK4 incluida, autorrelleno arrastrable tipo Excel, `Ctrl+D`, `Ctrl+V` desde Excel/Sheets).
-  - **Funciones y Notas** nativas (1.1 Calculadora + 1.2 Notas).
-  - **Scripts Python (CX II)** y **Lua** compilados con `tools/luna.exe`.
-- **Editor Visual `.tns`:** Doble clic en cualquier `.tns` del explorador para editar visualmente sus pestañas (Calculadora, Hoja de Cálculo, Notas, Gráficos) y modo XML avanzado.
-- **Catálogo oficial TI-Nspire CX II CAS:** Buscador de funciones reales con descripción, ejemplo y autocompletado en vivo.
-- **Iconografía 100% Pixel Art 32×32** (tema *Fox Orange / NaSuite*, sin emojis).
-- **Actualización automática** integrada con GitHub Releases.
+*Sin depender del navegador ni drivers propietarios pesados. Conecta tu TI-Nspire, organiza archivos, proyecta la pantalla en vivo y crea documentos `.tns` nativos en segundos.*
 
-## Desarrollo y Compilación desde código fuente
+</div>
 
+---
+
+## <img src="static/img/icons/download.png" width="22" height="22" alt="" /> Descarga e Instalación
+
+### Opción 1: Instalador de Windows (`NaSpire-Setup-v1.0.0.exe`) — Recomendado
+1. Descarga la última versión desde **[Releases (v1.0.0)](https://github.com/NachoFari/NaSpire/releases/latest)**.
+2. Ejecuta **`NaSpire-Setup-v1.0.0.exe`**.
+3. Se instalará con acceso directo en el Escritorio, Menú Inicio, desinstalador y **actualizaciones automáticas** vía GitHub Releases.
+
+### Opción 2: Versión 100% Portable (`NaSpire-v1.0.0-Windows-Portable.zip`)
+1. Descarga y descomprime el `.zip` en cualquier carpeta o pendrive.
+2. Ejecuta **`NaSpire.exe`** directamente en cualquier computador con Windows 10/11 sin instalar Python ni librerías.
+
+### Opción 3: Desde Código Fuente
 ```bash
+git clone https://github.com/NachoFari/NaSpire.git
+cd NaSpire
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 .venv\Scripts\python app.py
 ```
 
-Para compilar el ejecutable (`NaSpire.exe`), el instalador (`NaSpire-Setup-vX.Y.Z.exe`) y el ZIP portable:
-
+Para compilar el ejecutable (`NaSpire.exe`), el instalador (`NaSpire-Setup-v1.0.0.exe`) y el ZIP portable:
 ```bash
 .venv\Scripts\python scripts/build.py
 ```
 
 ---
-Desarrollado por **NachoFari** — [GitHub](https://github.com/NachoFari) | [Web](https://nachofari.github.io)
+
+## <img src="static/img/icons/file_tns.png" width="22" height="22" alt="" /> Funcionalidades Principales
+
+- <img src="static/img/icons/usb.png" width="16" height="16" alt="" /> **Conexión USB Nativa (NavNet + NNSE):** Compatible con toda la familia **TI-Nspire** (`CX II CAS`, `CX II`, `CX II-T`, `CX CAS`, `CX`, `Touchpad` y `Clickpad`), con reinicio de sesión NNSE automático sin tener que desenchufar el cable.
+- <img src="static/img/icons/folder.png" width="16" height="16" alt="" /> **Explorador de Archivos Completo:** Sube archivos arrastrando desde tu PC, descarga, renombra, mueve/reordena arrastrando sobre carpetas, crea carpetas, elimina y visualiza **etiquetas automáticas** de las apps internas de cada `.tns` (`Calculadora`, `Hoja de Cálculo`, `Notas`, `Gráficos`, `Geometría`, `Datos y Estadísticas`, `Python`, `Lua`).
+- <img src="static/img/icons/tv_live.png" width="16" height="16" alt="" /> **Modo Proyector en Vivo y Capturas (SS):** Proyecta la pantalla de tu calculadora en tiempo real (`1 FPS`, `~4 FPS` o `Máximo USB`) con contador de FPS, **Pantalla Completa**, zoom hasta `2.5x`, historial de sesión, copiar al portapapeles y guardar PNG.
+- <img src="static/img/icons/spreadsheet.png" width="16" height="16" alt="" /> **Creador Visual de Documentos `.tns` Nativos:**
+  - **Listas y Hoja de Cálculo** 100% nativa (`urn:tabulator`, método 13) con plantilla **Runge-Kutta 4 (RK4)** lista para usar.
+  - **Funciones y Notas** nativas (pestaña `1.1 Calculadora` con `Define f(x)=...` + pestaña `1.2 Notas`).
+  - **Scripts Python (CX II)** y **Lua** compilados con `tools/luna.exe` integrado.
+- <img src="static/img/icons/edit.png" width="16" height="16" alt="" /> **Editor Visual `.tns` por Pestañas:** Haz **doble clic** en cualquier `.tns` del explorador para editar visualmente sus pestañas (`Calculadora`, `Hoja de Cálculo`, `Notas`, `Gráficos`) o cambia al modo **`</> Ver XML`** avanzado.
+- <img src="static/img/icons/catalog.png" width="16" height="16" alt="" /> **Catálogo Oficial TI-Nspire CX II CAS + Autocompletado:** Buscador por categoría con funciones 100% reales del catálogo oficial TI-Nspire CAS, sintaxis, descripción, ejemplos y autocompletado flotante al escribir fórmulas.
+- <img src="static/img/icons/fox.png" width="16" height="16" alt="" /> **Estética Fox Orange (NaSuite) en Pixel Art 32×32:** Interfaz oscura profesional con splash screen y biblioteca completa de iconos en pixel art 32×32 sin emojis.
+- <img src="static/img/icons/download.png" width="16" height="16" alt="" /> **Auto-Updater integrado:** Verifica automáticamente nuevos Releases en GitHub y descarga/instala actualizaciones en silencio con un clic.
+
+---
+
+## <img src="static/img/icons/calc.png" width="22" height="22" alt="" /> Atajos de Teclado (Hojas de Cálculo y Editor)
+
+| Atajo / Acción | Función |
+| :--- | :--- |
+| **Doble clic en `.tns`** | Abrir archivo directamente en el **Editor Visual `.tns`** |
+| **Arrastrar esquina naranja** | Autorrellenar series numéricas o fórmulas (ajusta referencias relativas y respeta `$A$1`) |
+| `Ctrl + D` | Rellenar celda actual desde la celda superior (ajustando fórmula) |
+| `Ctrl + V` | Pegar tablas completas directamente desde Excel o Google Sheets |
+| `Enter` / `Shift + Enter` | Moverse a la fila siguiente / anterior |
+| `Tab` / `Enter` *(en autocompletado)* | Insertar función oficial TI-Nspire sugerida |
+
+---
+
+<div align="center">
+<img src="static/img/icons/fox.png" width="20" height="20" alt="" />
+Desarrollado por <b><a href="https://github.com/NachoFari">NachoFari</a></b> — <b><a href="https://nachofari.github.io">NaSuite</a></b> (NaTex + NaSpire)
+</div>

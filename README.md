@@ -46,7 +46,19 @@ Para compilar el ejecutable (`NaSpire.exe`), el instalador (`NaSpire-Setup-v1.0.
 
 ---
 
-## <img src="static/img/icons/camera.png" width="22" height="22" alt="" /> Galería de la Interfaz
+## <img src="static/img/icons/camera.png" width="22" height="22" alt="" /> Galería
+
+<div align="center">
+
+[![NaSpire Studio Showcase](docs/screenshots/gallery_showcase.gif)](docs/screenshots/gallery_showcase.gif)
+
+*Vista previa en carrusel de la interfaz de NaSpire Studio v1.0.0*
+
+</div>
+
+<details>
+<summary><b>Ver capturas individuales por sección</b></summary>
+<br>
 
 | Explorador de Archivos y Etiquetas `.tns` | Proyector en Vivo y Capturas (SS) |
 | :---: | :---: |
@@ -55,6 +67,8 @@ Para compilar el ejecutable (`NaSpire.exe`), el instalador (`NaSpire-Setup-v1.0.
 | Creador Visual `.tns` (Hoja Nativa / Python / Lua) | Editor Visual `.tns` por Pestañas (RK4 Solver) |
 | :---: | :---: |
 | [![Creador Visual .tns](docs/screenshots/showcase_creator.png)](docs/screenshots/showcase_creator.png) | [![Editor Visual .tns](docs/screenshots/showcase_editor_rk4.png)](docs/screenshots/showcase_editor_rk4.png) |
+
+</details>
 
 ---
 

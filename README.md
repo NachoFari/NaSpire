@@ -46,6 +46,18 @@ Para compilar el ejecutable (`NaSpire.exe`), el instalador (`NaSpire-Setup-v1.0.
 
 ---
 
+## <img src="static/img/icons/camera.png" width="22" height="22" alt="" /> Galería de la Interfaz
+
+| Explorador de Archivos y Etiquetas `.tns` | Proyector en Vivo y Capturas (SS) |
+| :---: | :---: |
+| [![Explorador de Archivos](docs/screenshots/showcase_explorer.png)](docs/screenshots/showcase_explorer.png) | [![Proyector en Vivo y Capturas](docs/screenshots/showcase_projector.png)](docs/screenshots/showcase_projector.png) |
+
+| Creador Visual `.tns` (Hoja Nativa / Python / Lua) | Editor Visual `.tns` por Pestañas (RK4 Solver) |
+| :---: | :---: |
+| [![Creador Visual .tns](docs/screenshots/showcase_creator.png)](docs/screenshots/showcase_creator.png) | [![Editor Visual .tns](docs/screenshots/showcase_editor_rk4.png)](docs/screenshots/showcase_editor_rk4.png) |
+
+---
+
 ## <img src="static/img/icons/file_tns.png" width="22" height="22" alt="" /> Funcionalidades Principales
 
 - <img src="static/img/icons/usb.png" width="16" height="16" alt="" /> **Conexión USB Nativa (NavNet + NNSE):** Compatible con toda la familia **TI-Nspire** (`CX II CAS`, `CX II`, `CX II-T`, `CX CAS`, `CX`, `Touchpad` y `Clickpad`), con reinicio de sesión NNSE automático sin tener que desenchufar el cable.

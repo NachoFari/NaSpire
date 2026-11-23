@@ -80,6 +80,10 @@
                     <img class="px-icon" src="/static/img/icons/edit.png" width="18" height="18" alt="" />
                     Editor .tns
                 </button>
+                <button class="nav-item" data-view="profiles">
+                    <img class="px-icon" src="/static/img/icons/floppy.png" width="18" height="18" alt="" />
+                    Perfiles
+                </button>
                 <button class="nav-item" data-view="device">
                     <img class="px-icon" src="/static/img/icons/calc.png" width="18" height="18" alt="" />
                     Dispositivo
@@ -327,10 +331,16 @@ end
                             </div>
                         </div>
 
-                        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:6px;">
+                        <div id="creator-disk-banner" class="creator-disk-banner" style="display:none;"></div>
+
+                        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:6px;flex-wrap:wrap;">
                             <button id="btn-build-download" class="btn">
                                 <img class="px-icon" src="/static/img/icons/save.png" width="15" height="15" alt="" />
                                 Compilar y Descargar .tns
+                            </button>
+                            <button id="btn-build-disk" class="btn">
+                                <img class="px-icon" src="/static/img/icons/floppy.png" width="15" height="15" alt="" />
+                                Guardar en Disco
                             </button>
                             <button id="btn-build-upload" class="btn btn-primary">
                                 <img class="px-icon" src="/static/img/icons/upload.png" width="15" height="15" alt="" />
@@ -363,6 +373,10 @@ end
                         <button id="btn-editor-download" class="btn btn-sm" disabled>
                             <img class="px-icon" src="/static/img/icons/save.png" width="15" height="15" alt="" />
                             Descargar .tns
+                        </button>
+                        <button id="btn-editor-save-disk" class="btn btn-sm" disabled>
+                            <img class="px-icon" src="/static/img/icons/floppy.png" width="15" height="15" alt="" />
+                            Guardar en Disco
                         </button>
                         <button id="btn-editor-save-calc" class="btn btn-primary btn-sm" disabled>
                             <img class="px-icon" src="/static/img/icons/upload.png" width="15" height="15" alt="" />
@@ -441,6 +455,32 @@ end
                     </div>
                 </div>
             </section>
+
+            <!-- VIEW 5B: PERFILES (SAVE SLOTS) -->
+            <section id="view-profiles" class="view-panel">
+                <div class="profiles-header">
+                    <div>
+                        <h2 style="font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;">
+                            <img class="px-icon" src="/static/img/icons/floppy.png" width="20" height="20" alt="" />
+                            Perfiles de Calculadora (Save Slots)
+                        </h2>
+                        <p style="font-size:12.5px;color:var(--text-muted);margin-top:3px;">
+                            Arrastra los discos para reordenarlos, edita su color/contenido o guarda programas directo desde Explorador, Creador y Editor.
+                        </p>
+                    </div>
+                    <label class="safety-toggle" title="Evita borrar la carpeta /ndless al cargar un perfil">
+                        <input type="checkbox" id="chk-protect-ndless" checked />
+                        <span>Proteger <code>/ndless</code></span>
+                        <span class="safety-badge">ACTIVO</span>
+                    </label>
+                </div>
+
+                <div id="profiles-slots-grid" class="slots-grid"></div>
+
+                <div class="add-row-footer">
+                    <button id="btn-profiles-add-row" class="btn-add-row">+ Agregar 3 discos</button>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -483,6 +523,71 @@ end
         </div>
     </div>
 
+    <!-- Modal Editar Disco + Mini Explorador -->
+    <div id="profile-edit-modal" class="modal-backdrop">
+        <div class="modal modal-lg">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span id="profile-edit-title" class="modal-title">Editar Disco</span>
+                <button id="profile-edit-close" class="btn btn-sm btn-ghost">Cerrar</button>
+            </div>
+            <div class="field">
+                <label>Título en la etiqueta</label>
+                <input id="profile-edit-name" class="input" type="text" maxlength="24" placeholder="Ej: MAT270 Certamen 3" />
+            </div>
+            <div class="field">
+                <label>Color del disquete (Paleta NaSuite)</label>
+                <div id="profile-edit-swatches" class="color-swatches"></div>
+            </div>
+            <div class="field">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                    <label id="profile-edit-files-label" style="margin-bottom:0;">Contenido del disco</label>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <button id="btn-mini-mkdir" class="btn btn-sm">
+                            <img class="px-icon" src="/static/img/icons/folder.png" width="14" height="14" alt="" />
+                            + Carpeta
+                        </button>
+                        <button id="btn-mini-upload" class="btn btn-sm">
+                            <img class="px-icon" src="/static/img/icons/upload.png" width="14" height="14" alt="" />
+                            + Subir archivo
+                        </button>
+                        <button id="btn-mini-create-tns" class="btn btn-primary btn-sm">
+                            <img class="px-icon" src="/static/img/icons/file_tns.png" width="14" height="14" alt="" />
+                            + Crear .tns
+                        </button>
+                        <input id="mini-file-picker" type="file" multiple style="display:none;" />
+                    </div>
+                </div>
+                <div id="profile-mini-explorer" class="mini-explorer"></div>
+            </div>
+            <div class="modal-actions">
+                <button id="profile-edit-cancel" class="btn btn-sm">Cancelar</button>
+                <button id="profile-edit-save" class="btn btn-primary btn-sm">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Guardar Archivo en Disco -->
+    <div id="save-to-disk-modal" class="modal-backdrop">
+        <div class="modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span class="modal-title">Guardar en Disco (Perfil)</span>
+                <button id="std-close" class="btn btn-sm btn-ghost">Cerrar</button>
+            </div>
+            <div class="field">
+                <label>Disco destino</label>
+                <select id="std-slot-select" class="select"></select>
+            </div>
+            <div class="field">
+                <label>Ruta dentro de la calculadora / disco</label>
+                <input id="std-path-input" class="input" type="text" placeholder="/archivo.tns" />
+            </div>
+            <div class="modal-actions">
+                <button id="std-cancel" class="btn btn-sm">Cancelar</button>
+                <button id="std-confirm" class="btn btn-primary btn-sm">Guardar en Disco</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <!-- Módulos JS -->
@@ -494,6 +599,7 @@ end
     <script src="/static/js/screenshot.js"></script>
     <script src="/static/js/creator.js"></script>
     <script src="/static/js/editor.js"></script>
+    <script src="/static/js/profiles.js"></script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>

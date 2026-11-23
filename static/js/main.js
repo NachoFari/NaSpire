@@ -33,6 +33,7 @@ window.NaSpireApp = {
         NaSpireScreenshot.init();
         NaSpireCreator.init();
         NaSpireEditor.init();
+        NaSpireProfiles.init();
         NaSpireCatalog.init();
 
         try {
@@ -129,6 +130,9 @@ window.NaSpireApp = {
         });
         if (view === "creator" && this.connected) {
             NaSpireCreator.refreshFolders(false);
+        }
+        if (view === "profiles") {
+            NaSpireProfiles.loadSlots();
         }
         if (view !== "screenshot" && NaSpireScreenshot.liveActive) {
             NaSpireScreenshot.stopLive();

@@ -59,6 +59,7 @@ window.NaSpireCreator = {
         });
 
         document.getElementById("btn-build-download").addEventListener("click", () => this.build(false));
+        document.getElementById("btn-build-disk")?.addEventListener("click", () => this.buildToDisk());
         document.getElementById("btn-build-upload").addEventListener("click", () => this.build(true));
         document.getElementById("btn-refresh-tns-folders")?.addEventListener("click", () => this.refreshFolders(true));
 
@@ -232,5 +233,35 @@ window.NaSpireCreator = {
         } catch (err) {
             NaSpireUI.toast(err.message, "error");
         }
+    },
+
+    buildToDisk() {
+        const filename = document.getElementById("tns-filename").value.trim() || "documento_naspire";
+        const cleanName = filename.toLowerCase().endsWith(".tns") ? filename : `${filename}.tns`;
+        const folder = (document.getElementById("tns-upload-dir")?.value || "/").replace(/\/+$/, "");
+        const defaultPath = `${folder}/${cleanName}`.replace(/^\/\//, "/");
+
+        NaSpireProfiles.openSaveToDiskModal({
+            defaultPath,
+            getBase64: async () => {
+                const payload = { mode: this.mode, filename, title: filename, upload_dir: "" };
+                if (this.mode === "spreadsheet") {
+                    this.syncSheetFromDom();
+                    payload.columns = this.sheetCols;
+                    payload.formulas = this.sheetFormulas;
+                    payload.rows = this.sheetRows;
+                } else if (this.mode === "functions") {
+                    this.syncFunctionsFromDom();
+                    payload.functions = this.functionsList;
+                    payload.notes = document.getElementById("fn-notes").value;
+                } else if (this.mode === "python") {
+                    payload.code = document.getElementById("tns-python-code").value;
+                } else if (this.mode === "lua") {
+                    payload.code = document.getElementById("tns-lua-code").value;
+                }
+                const res = await NaSpireAPI.buildTns(payload);
+                return res.content_base64;
+            },
+        });
     },
 };

@@ -76,4 +76,37 @@ window.NaSpireAPI = {
     openExternal(url) {
         return this.request("/api/open-external", { method: "POST", body: JSON.stringify({ url }) });
     },
+
+    profilesList() { return this.request("/api/profiles/list"); },
+    profilesAddRow() { return this.request("/api/profiles/add-row", { method: "POST", body: "{}" }); },
+    profilesReorder(ordered_ids) {
+        return this.request("/api/profiles/reorder", { method: "POST", body: JSON.stringify({ ordered_ids }) });
+    },
+    profilesRename(slot_id, name, theme) {
+        return this.request("/api/profiles/rename", { method: "POST", body: JSON.stringify({ slot_id, name, theme }) });
+    },
+    profilesClear(slot_id) {
+        return this.request("/api/profiles/clear", { method: "POST", body: JSON.stringify({ slot_id }) });
+    },
+    profilesContents(slot_id) {
+        return this.request(`/api/profiles/contents?slot_id=${encodeURIComponent(slot_id)}`);
+    },
+    profilesMkdir(slot_id, path) {
+        return this.request("/api/profiles/mkdir", { method: "POST", body: JSON.stringify({ slot_id, path }) });
+    },
+    profilesAddFile(payload) {
+        return this.request("/api/profiles/add-file", { method: "POST", body: JSON.stringify(payload) });
+    },
+    profilesDeleteFile(slot_id, path) {
+        return this.request("/api/profiles/delete-file", { method: "POST", body: JSON.stringify({ slot_id, path }) });
+    },
+    profilesSave(slot_id, protect_ndless) {
+        return this.request("/api/profiles/save", { method: "POST", body: JSON.stringify({ slot_id, protect_ndless }) });
+    },
+    profilesLoad(slot_id, protect_ndless) {
+        return this.request("/api/profiles/load", { method: "POST", body: JSON.stringify({ slot_id, protect_ndless }) });
+    },
+    profilesProgress(slot_id) {
+        return this.request(`/api/profiles/progress?slot_id=${encodeURIComponent(slot_id)}`);
+    },
 };

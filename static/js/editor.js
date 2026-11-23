@@ -56,6 +56,7 @@ window.NaSpireEditor = {
         });
 
         document.getElementById("btn-editor-download")?.addEventListener("click", () => this.save(false));
+        document.getElementById("btn-editor-save-disk")?.addEventListener("click", () => this.saveToDisk());
         document.getElementById("btn-editor-save-calc")?.addEventListener("click", () => this.save(true));
     },
 
@@ -90,6 +91,7 @@ window.NaSpireEditor = {
         document.getElementById("btn-editor-toggle-xml").disabled = !this.activeFile;
         document.getElementById("btn-editor-pretty").disabled = !this.activeFile;
         document.getElementById("btn-editor-download").disabled = !this.activeFile;
+        document.getElementById("btn-editor-save-disk").disabled = !this.activeFile;
         document.getElementById("btn-editor-save-calc").disabled = !this.activeFile;
 
         this.updateModeVisibility();
@@ -456,6 +458,32 @@ window.NaSpireEditor = {
         } catch (err) {
             NaSpireUI.toast(err.message, "error");
         }
+    },
+
+    saveToDisk() {
+        if (!this.activeFile) return;
+        const defaultPath = document.getElementById("editor-save-path").value.trim() || `/${this.filename}`;
+        NaSpireProfiles.openSaveToDiskModal({
+            defaultPath,
+            getBase64: async () => {
+                if (this.xmlMode) {
+                    this.files[this.activeFile] = document.getElementById("editor-xml-area").value;
+                } else {
+                    this.syncCurrentPageFromDom();
+                }
+                const res = await NaSpireAPI.saveTns({
+                    filename: this.filename,
+                    files: this.files,
+                    pages: this.xmlMode ? [] : this.pages,
+                    calc_path: "",
+                });
+                if (res.files) {
+                    this.files = res.files;
+                    this.selectFile(this.activeFile);
+                }
+                return res.content_base64;
+            },
+        });
     },
 
     _escAttr(s) {

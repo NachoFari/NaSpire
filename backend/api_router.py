@@ -11,6 +11,7 @@ from typing import Any, Dict, Tuple
 
 from backend.device_registry import get_supported_models
 from backend.nspire_usb import NspireClient, NspireError
+from backend.profiles import ProfileError, ProfileManager
 from backend.tns_builder import (
     TnsBuilder,
     TnsBuildError,
@@ -30,6 +31,7 @@ class ApiRouter:
         self.base_dir = base_dir
         self.client = NspireClient()
         self.tns = TnsBuilder(base_dir)
+        self.profiles = ProfileManager(base_dir)
         self._last_info: Dict[str, Any] = {}
         self._tags_cache: Dict[str, Any] = {}
 
@@ -141,8 +143,19 @@ class ApiRouter:
                     },
                 )
 
+            if path == "/api/profiles/list":
+                return self._json(200, {"ok": True, "slots": self.profiles.list_slots()})
+
+            if path == "/api/profiles/progress":
+                slot_id = int(query.get("slot_id", "1") or "1")
+                return self._json(200, {"ok": True, "progress": self.profiles.get_progress(slot_id)})
+
+            if path == "/api/profiles/contents":
+                slot_id = int(query.get("slot_id", "1") or "1")
+                return self._json(200, {"ok": True, "items": self.profiles.list_slot_contents(slot_id)})
+
             return self._json(404, {"ok": False, "error": f"Endpoint no encontrado: {path}"})
-        except (NspireError, TnsBuildError, TnsEditorError) as exc:
+        except (NspireError, TnsBuildError, TnsEditorError, ProfileError) as exc:
             return self._json(400, {"ok": False, "error": str(exc)})
         except Exception as exc:
             return self._json(500, {"ok": False, "error": f"Error interno: {exc}"})
@@ -326,8 +339,68 @@ class ApiRouter:
                     return self._json(200, {"ok": True})
                 return self._json(400, {"ok": False, "error": "URL inválida"})
 
+            if path == "/api/profiles/add-row":
+                return self._json(200, {"ok": True, "slots": self.profiles.add_slot_row()})
+
+            if path == "/api/profiles/reorder":
+                ordered_ids = payload.get("ordered_ids") or []
+                return self._json(200, {"ok": True, "slots": self.profiles.reorder_slots(ordered_ids)})
+
+            if path == "/api/profiles/rename":
+                slot_id = int(payload.get("slot_id", 0))
+                name = payload.get("name", "")
+                theme = payload.get("theme")
+                return self._json(200, {"ok": True, "slot": self.profiles.rename_slot(slot_id, name, theme)})
+
+            if path == "/api/profiles/clear":
+                slot_id = int(payload.get("slot_id", 0))
+                return self._json(200, {"ok": True, "slot": self.profiles.clear_slot(slot_id)})
+
+            if path == "/api/profiles/mkdir":
+                slot_id = int(payload.get("slot_id", 0))
+                dir_path = payload.get("path", "").strip()
+                slot = self.profiles.create_dir_in_slot(slot_id, dir_path)
+                return self._json(200, {"ok": True, "slot": slot})
+
+            if path == "/api/profiles/add-file":
+                slot_id = int(payload.get("slot_id", 0))
+                dest_path = payload.get("path", "").strip()
+                from_calc = payload.get("from_calc_path", "").strip()
+                if from_calc:
+                    if not self.client.is_connected:
+                        raise NspireError("Conecta la calculadora para copiar ese archivo al disco.")
+                    raw = self.client.read_file(from_calc)
+                    if not dest_path:
+                        dest_path = from_calc
+                else:
+                    b64 = payload.get("content_base64", "")
+                    if not b64:
+                        raise ProfileError("Falta contenido del archivo.")
+                    raw = base64.b64decode(b64)
+                slot = self.profiles.add_file_to_slot(slot_id, dest_path, raw)
+                return self._json(200, {"ok": True, "slot": slot})
+
+            if path == "/api/profiles/delete-file":
+                slot_id = int(payload.get("slot_id", 0))
+                file_path = payload.get("path", "").strip()
+                slot = self.profiles.delete_file_from_slot(slot_id, file_path)
+                return self._json(200, {"ok": True, "slot": slot})
+
+            if path == "/api/profiles/save":
+                slot_id = int(payload.get("slot_id", 0))
+                protect_ndless = bool(payload.get("protect_ndless", True))
+                prog = self.profiles.start_save(self.client, slot_id, protect_ndless=protect_ndless)
+                return self._json(200, {"ok": True, "progress": prog})
+
+            if path == "/api/profiles/load":
+                slot_id = int(payload.get("slot_id", 0))
+                protect_ndless = bool(payload.get("protect_ndless", True))
+                self._tags_cache.clear()
+                prog = self.profiles.start_load(self.client, slot_id, protect_ndless=protect_ndless)
+                return self._json(200, {"ok": True, "progress": prog})
+
             return self._json(404, {"ok": False, "error": f"Endpoint no encontrado: {path}"})
-        except (NspireError, TnsBuildError, TnsEditorError) as exc:
+        except (NspireError, TnsBuildError, TnsEditorError, ProfileError) as exc:
             return self._json(400, {"ok": False, "error": str(exc)})
         except Exception as exc:
             return self._json(500, {"ok": False, "error": f"Error interno: {exc}"})

@@ -140,6 +140,7 @@ window.NaSpireExplorer = {
                     <td>
                         <div class="row-actions">
                             ${isTns ? `<button class="btn btn-sm btn-ghost" data-act="edit" title="Abrir en Editor .tns">${NaSpireUI.icon("edit", 16)}</button>` : ""}
+                            ${!it.is_dir ? `<button class="btn btn-sm btn-ghost" data-act="save_disk" title="Guardar en Disco (Perfil)">${NaSpireUI.icon("floppy", 16)}</button>` : ""}
                             ${!it.is_dir ? `<button class="btn btn-sm btn-ghost" data-act="download" title="Descargar">${NaSpireUI.icon("download", 16)}</button>` : ""}
                             <button class="btn btn-sm btn-ghost" data-act="rename" title="Renombrar">${NaSpireUI.icon("rename", 16)}</button>
                             <button class="btn btn-sm btn-ghost" data-act="move" title="Mover a otra carpeta">${NaSpireUI.icon("move", 16)}</button>
@@ -189,6 +190,7 @@ window.NaSpireExplorer = {
                         e.stopPropagation();
                         const act = btn.dataset.act;
                         if (act === "edit") NaSpireEditor.openFromCalc(path);
+                        if (act === "save_disk") NaSpireProfiles.openSaveToDiskModal({ defaultPath: path, fromCalcPath: path });
                         if (act === "download") window.location.href = NaSpireAPI.downloadUrl(path);
                         if (act === "rename") this.renameItem(path, name);
                         if (act === "move") this.moveItem(path, name);

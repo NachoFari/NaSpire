@@ -13,6 +13,7 @@ dist_installer/
 *.zip
 
 # Archivos temporales y pruebas locales
+profiles/
 rk4_solver.tns
 *.log
 .DS_Store
